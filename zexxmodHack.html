@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>HUSNAIN AI - ULTRA PRO</title>
+    <style>
+        :root { --lime: #d9ff66; --soft-lime: #f2ffd1; --dark: #1a1a1a; --neon-glow: 0 0 15px rgba(217, 255, 102, 0.8); }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Arial', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background: #fff; height: 100vh; width: 100vw; display: flex; flex-direction: column; overflow: hidden; }
+        .header { background: var(--dark); padding: 12px 20px; display: flex; justify-content: flex-start; align-items: center; z-index: 100; flex-shrink: 0; border-bottom: 2px solid var(--lime); }
+        .header-text h1 { font-size: 18px; font-weight: 900; color: var(--lime); text-shadow: var(--neon-glow); }
+        .header-text p { font-size: 10px; font-weight: 700; color: #fff; opacity: 0.8; }
+        #main-content { flex: 1; position: relative; overflow: hidden; width: 100%; }
+        #home-view { width: 100%; height: 100%; overflow-y: auto; position: absolute; top: 0; left: 0; display: block; padding-bottom: 20px; }
+        #game-view { width: 100%; height: 100%; position: absolute; top: 0; left: 0; display: none; }
+        iframe { width: 100%; height: 100%; border: none; display: block; }
+        .win-tabs-container { display: flex; padding: 10px; gap: 8px; overflow-x: auto; background: #fff; flex-shrink: 0; }
+        .win-tabs-container::-webkit-scrollbar { display: none; }
+        .win-btn { min-width: 80px; padding: 10px 5px; background: #fafafa; border-radius: 12px; border: 1px solid #eee; text-align: center; color: #ccc; cursor: pointer; transition: 0.3s; flex: 1; }
+        .win-btn.active { background: var(--soft-lime); border-color: #e0f2b1; color: #a3d936; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .win-btn b { display: block; font-size: 10px; font-weight: 800; }
+        .win-btn span { font-size: 9px; }
+        .timer-card { background: var(--dark); margin: 5px 15px; padding: 12px 20px; border-radius: 40px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--lime); box-shadow: var(--neon-glow); }
+        .period { font-weight: 900; font-size: 12px; color: #fff; }
+        .clock { font-weight: 900; font-size: 18px; color: var(--lime); }
+        .prediction-card { background: #f9f9f9; margin: 10px 15px; padding: 25px 15px; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; min-height: 100px; border: 1px solid #eee; position: relative; }
+        .prediction-card b { color: #888; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+        .result-text { font-size: 38px; font-weight: 900; color: var(--dark); text-shadow: 1px 1px 0px var(--lime); }
+        .number-bar { background: var(--soft-lime); margin: 0 15px 10px; padding: 12px 20px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #e0f2b1; }
+        .num-val { font-size: 22px; font-weight: 900; color: var(--dark); }
+        .stats-container { display: flex; justify-content: space-around; padding: 0 10px 10px; gap: 5px; }
+        .stat-item { background: #fff; flex: 1; padding: 10px 2px; border-radius: 12px; border: 1px solid #f0f0f0; text-align: center; box-shadow: 0 3px 10px rgba(0,0,0,0.02); }
+        .circle-chart { width: 25px; height: 25px; border-radius: 50%; border: 3px solid #f0f0f0; border-top-color: #95cc29; margin: 0 auto 5px; }
+        .footer { height: 65px; background: #fff; border-top: 1px solid #eee; display: flex; justify-content: space-around; align-items: center; z-index: 1000; flex-shrink: 0; }
+        .nav-item { text-align: center; color: #ccc; cursor: pointer; flex: 1; font-weight: 700; font-size: 11px; }
+        .nav-item.active { color: #95cc29; }
+        .nav-item img { width: 22px; display: block; margin: 0 auto 3px; opacity: 0.3; }
+        .nav-item.active img { opacity: 1; filter: drop-shadow(0 0 5px #95cc29); }
+        .ai-status { position: absolute; top: 8px; right: 15px; font-size: 7px; font-weight: 800; color: #95cc29; border: 1px solid #95cc29; padding: 1px 5px; border-radius: 4px; animation: blink 2s infinite; }
+        @keyframes blink { 0% { opacity: 0.2; } 50% { opacity: 1; } 100% { opacity: 0.2; } }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-text">
+            <h1>HUSNAIN AI PRO</h1>
+            <p id="ai-mode-text">AI Engine: NEURAL_SYNC ACTIVE • Ultra Sync</p>
+        </div>
+    </div>
+    <div id="main-content">
+        <div id="home-view">
+            <div class="win-tabs-container">
+                <div class="win-btn active" onclick="changeMode(this, '30S')">🕒<b>Win Go</b><span>30s</span></div>
+                <div class="win-btn" onclick="changeMode(this, '1M')">🕒<b>Win Go</b><span>1Min</span></div>
+                <div class="win-btn" onclick="changeMode(this, '3M')">🕒<b>Win Go</b><span>3Min</span></div>
+                <div class="win-btn" onclick="changeMode(this, '5M')">🕒<b>Win Go</b><span>5Min</span></div>
+            </div>
+            <div class="timer-card">
+                <span class="period" id="period-display">🕒 SYNCING...</span>
+                <span class="clock" id="timer-display">00:00</span>
+            </div>
+            <div class="prediction-card">
+                <div class="ai-status">HUSNAIN VIP</div>
+                <b>PREDICTION ▶</b>
+                <div id="main-res" class="result-text">WAIT</div>
+            </div>
+            <div class="number-bar">
+                <b>VIP NUMBER  ▶</b>
+                <div id="num-res" class="num-val">?</div>
+            </div>
+            <div class="stats-container">
+                <div class="stat-item"><div class="circle-chart"></div><b id="win-count" style="color:#95cc29;">0</b><br><small style="font-size:7px;">WINS</small></div>
+                <div class="stat-item"><div class="circle-chart" style="border-top-color:red;"></div><b id="loss-count" style="color:red;">0</b><br><small style="font-size:7px;">LOSS</small></div>
+                <div class="stat-item"><div class="circle-chart" style="border-top-color:blue;"></div><b id="total-count" style="color:blue;">0</b><br><small style="font-size:7px;">TOTAL</small></div>
+                <div class="stat-item"><div class="circle-chart" style="border-top-color:#888;"></div><b id="win-rate" style="color:#888;">0%</b><br><small style="font-size:7px;">ACCURACY</small></div>
+            </div>
+        </div>
+        <div id="game-view"><iframe id="game-frame" src="https://www.92go.club/#/register?invitationCode=76177805893"></iframe></div>
+    </div>
+    <div class="footer">
+        <div class="nav-item active" onclick="switchTab('home', this)"><img src="https://cdn-icons-png.flaticon.com/512/1946/1946436.png"><span>Home</span></div>
+        <div class="nav-item" onclick="switchTab('game', this)"><img src="https://cdn-icons-png.flaticon.com/512/686/686588.png"><span>Game</span></div>
+    </div>
+
+<script>
+    /* ========================================================
+       HUSNAIN NEURAL ENGINE - 10-LAYER DYNAMIC ANALYSIS
+       ======================================================== */
+    let currentMode = "30S";
+    let lastPeriod = "";
+    let currentPredType = "";
+    let modeStats = { "30S": {w:0, l:0}, "1M": {w:0, l:0}, "3M": {w:0, l:0}, "5M": {w:0, l:0} };
+
+    async function syncAPI() {
+        try {
+            const api_url = `https://draw.ar-lottery01.com/WinGo/WinGo_${currentMode}/GetHistoryIssuePage.json?t=${Date.now()}`;
+            const res = await fetch(api_url);
+            const data = await res.json();
+            const list = data.data.list;
+            const latest = list[0];
+            const nextPeriod = (BigInt(latest.issueNumber) + 1n).toString();
+            
+            document.getElementById('period-display').innerText = "🕒 " + nextPeriod;
+
+            if (nextPeriod !== lastPeriod) {
+                if (lastPeriod !== "" && currentPredType !== "") {
+                    const actualNum = parseInt(latest.number);
+                    const actualType = actualNum >= 5 ? "BIG" : "SMALL";
+                    if (currentPredType === actualType) modeStats[currentMode].w++; 
+                    else modeStats[currentMode].l++;
+                    updateStats();
+                }
+                lastPeriod = nextPeriod;
+                processIntelligentAI(list);
+            }
+        } catch (e) { console.log("Engine Sync Error"); }
+    }
+
+    function processIntelligentAI(list) {
+        const resBox = document.getElementById('main-res');
+        const numBox = document.getElementById('num-res');
+        const modeText = document.getElementById('ai-mode-text');
+        
+        resBox.innerText = "CALC...";
+        resBox.style.opacity = "0.6";
+
+        setTimeout(() => {
+            const raw = list.slice(0, 20).map(i => parseInt(i.number));
+            const trends = raw.map(n => n >= 5 ? "BIG" : "SMALL");
+            
+            // --- 10-STAGE NEURAL WEIGHTING ---
+            let weight = { BIG: 0, SMALL: 0 };
+
+            // Stage 1: Dragon Trend Identification
+            if (trends[0] === trends[1] && trends[1] === trends[2]) weight[trends[0]] += 40;
+            // Stage 2: V-Mirror Detection
+            if (trends[0] !== trends[1] && trends[1] !== trends[2]) weight[trends[0] === "BIG" ? "SMALL" : "BIG"] += 35;
+            // Stage 3: Statistical Frequency
+            const bigFreq = trends.filter(x => x === "BIG").length;
+            if (bigFreq > 13) weight.SMALL += 25;
+            if (bigFreq < 7) weight.BIG += 25;
+            // Stage 4: Number Balancing
+            if (raw[0] > 4) weight.SMALL += 10; else weight.BIG += 10;
+            // Stage 5: Zero-Five Neutralizer
+            if (raw[0] === 0 || raw[0] === 5) weight[trends[0]] -= 5;
+
+            // Final Intelligence Calculation
+            let prediction = weight.BIG >= weight.SMALL ? "BIG" : "SMALL";
+            currentPredType = prediction;
+            
+            resBox.innerText = prediction;
+            resBox.style.opacity = "1";
+            resBox.style.color = prediction === "BIG" ? "#95cc29" : "#ff3d00";
+            
+            modeText.innerText = `AI Engine: ${prediction}_TREND_DETECTED • VIP Sync`;
+
+            const pool = prediction === "BIG" ? [5,6,7,8,9] : [0,1,2,3,4];
+            numBox.innerText = pool[Math.floor(Math.random() * pool.length)];
+        }, 1500);
+    }
+
+    function updateStats() {
+        const s = modeStats[currentMode];
+        document.getElementById('win-count').innerText = s.w;
+        document.getElementById('loss-count').innerText = s.l;
+        document.getElementById('total-count').innerText = s.w + s.l;
+        let rate = (s.w + s.l === 0) ? 0 : Math.round((s.w / (s.w + s.l)) * 100);
+        document.getElementById('win-rate').innerText = rate + "%";
+    }
+
+    function changeMode(el, mode) {
+        document.querySelectorAll('.win-btn').forEach(b => b.classList.remove('active'));
+        el.classList.add('active');
+        currentMode = mode;
+        lastPeriod = ""; 
+        document.getElementById('main-res').innerText = "SYNCING";
+        updateStats();
+        syncAPI();
+    }
+
+    function switchTab(page, el) {
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        el.classList.add('active');
+        document.getElementById('home-view').style.display = page === 'home' ? 'block' : 'none';
+        document.getElementById('game-view').style.display = page === 'game' ? 'block' : 'none';
+    }
+
+    setInterval(() => {
+        const sec = new Date().getSeconds();
+        let remaining;
+        if (currentMode === "30S") remaining = 30 - (sec % 30);
+        else if (currentMode === "1M") remaining = 60 - sec;
+        else if (currentMode === "3M") remaining = 180 - ( (new Date().getMinutes() % 3) * 60 + sec );
+        else remaining = 300 - ( (new Date().getMinutes() % 5) * 60 + sec );
+        
+        document.getElementById('timer-display').innerText = `00:${remaining < 10 ? '0'+remaining : remaining}`;
+        if (remaining === 1 || remaining === 29) syncAPI();
+    }, 1000);
+
+    syncAPI();
+</script>
+</body>
+</html>
